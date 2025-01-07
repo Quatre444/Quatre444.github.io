@@ -111,7 +111,7 @@
   </div>
 
   <script>
-    const omdbApiKey = 'your_omdb_api_key_here'; // You need to get your API key from OMDb (https://www.omdbapi.com/)
+    const omdbApiKey = '8611a7d8'; // You need to get your API key from OMDb (https://www.omdbapi.com/)
 
     async function getMovie() {
       try {
@@ -121,7 +121,7 @@
         document.getElementById('movie').innerText = movieTitle;
 
         // Fetch the movie poster from OMDb API
-        const movieData = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(movieTitle)}&apikey=${8611a7d8}`);
+        const movieData = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(movieTitle)}&apikey=${omdbApiKey}`);
         const movieDetails = await movieData.json();
         
         if (movieDetails.Response === "True") {
