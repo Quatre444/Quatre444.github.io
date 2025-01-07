@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie Grader</title>
+</head>
+<body>
+  <h1>Random Movie Grader</h1>
+  <button onclick="getMovie()">Get Random Movie</button>
+  <p id="movie"></p>
+  <input type="number" id="grade" placeholder="Enter grade" />
+  <button onclick="submitGrade()">Submit Grade</button>
+
+  <script>
+    async function getMovie() {
+      const response = await fetch('/movie');
+      const data = await response.json();
+      document.getElementById('movie').innerText = data.movie || "No more movies!";
+    }
+
+    async function submitGrade() {
+      const movie = document.getElementById('movie').innerText;
+      const grade = document.getElementById('grade').value;
+      await fetch('/grade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ movie, grade })
+      });
+      alert("Grade submitted!");
+    }
+  </script>
+</body>
+</html>
