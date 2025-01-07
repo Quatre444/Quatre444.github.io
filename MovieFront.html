@@ -1,16 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Movie Grader</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #4A90E2;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      margin: 10px 0;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    #movie {
+      font-size: 1.2em;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      font-size: 1em;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 200px;
+    }
+
+    input[type="number"]:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .container input, .container button {
+      width: 100%;
+    }
+
+    .reset-button {
+      background-color: #f44336;
+    }
+
+    .reset-button:hover {
+      background-color: #e53935;
+    }
+  </style>
 </head>
 <body>
-  <h1>Random Movie Grader</h1>
-  <button onclick="getMovie()">Get Random Movie</button>
-  <p id="movie">No movie selected yet</p>
-  <input type="number" id="grade" placeholder="Enter grade" />
-  <button onclick="submitGrade()">Submit Grade</button>
-  <br /><br />
-  <button onclick="resetMovies()">Reset Movie List</button>
+  <div class="container">
+    <h1>Random Movie Grader</h1>
+    <button onclick="getMovie()">Get Random Movie</button>
+    <p id="movie">No movie selected yet</p>
+    <input type="number" id="grade" placeholder="Enter grade" />
+    <button onclick="submitGrade()">Submit Grade</button>
+    <br />
+    <button class="reset-button" onclick="resetMovies()">Reset Movie List</button>
+  </div>
 
   <script>
     async function getMovie() {
