@@ -89,6 +89,13 @@
     .reset-button:hover {
       background-color: #d32f2f;
     }
+
+    #movie-image {
+      margin-top: 20px;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -96,6 +103,7 @@
     <h1>Random Movie Grader</h1>
     <button onclick="getMovie()">Get Random Movie</button>
     <p id="movie">No movie selected yet</p>
+    <img id="movie-image" src="" alt="Movie Poster" style="display: none;" />
     <input type="number" id="grade" placeholder="Enter grade" />
     <button onclick="submitGrade()">Submit Grade</button>
     <br />
@@ -103,11 +111,27 @@
   </div>
 
   <script>
+    const omdbApiKey = 'your_omdb_api_key_here'; // You need to get your API key from OMDb (https://www.omdbapi.com/)
+
     async function getMovie() {
       try {
         const response = await fetch('https://quatre444.pythonanywhere.com/movie');
         const data = await response.json();
-        document.getElementById('movie').innerText = data.movie || "No more movies!";
+        const movieTitle = data.movie || "No more movies!";
+        document.getElementById('movie').innerText = movieTitle;
+
+        // Fetch the movie poster from OMDb API
+        const movieData = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(movieTitle)}&apikey=${omdbApiKey}`);
+        const movieDetails = await movieData.json();
+        
+        if (movieDetails.Response === "True") {
+          const posterUrl = movieDetails.Poster;
+          const movieImage = document.getElementById('movie-image');
+          movieImage.src = posterUrl;
+          movieImage.style.display = 'block'; // Show the image
+        } else {
+          document.getElementById('movie-image').style.display = 'none'; // Hide if no poster found
+        }
       } catch (error) {
         console.error("Error fetching movie:", error);
         document.getElementById('movie').innerText = "Error fetching movie!";
@@ -132,6 +156,7 @@
         alert("Grade submitted!");
         document.getElementById('movie').innerText = ""; // Clear the displayed movie
         document.getElementById('grade').value = ""; // Clear the grade input
+        document.getElementById('movie-image').style.display = 'none'; // Hide the image
       } catch (error) {
         console.error("Error submitting grade:", error);
         alert("Error submitting grade.");
