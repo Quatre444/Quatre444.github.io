@@ -10,113 +10,77 @@
       text-align: center;
       padding: 20px;
     }
-    h1 {
-      font-size: 32px;
-      margin-bottom: 20px;
-      font-weight: bold;
-    }
     button {
       background-color: #4CAF50;
       color: white;
       border: none;
       padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
       font-size: 16px;
       margin: 10px;
       cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s;
     }
     button:hover {
       background-color: #45a049;
     }
-    #movieContainer {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #333;
-      border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
-      margin-top: 40px;
+    #movieDetails {
+      margin-top: 20px;
     }
     #moviePoster {
-      max-width: 100%;
-      border-radius: 8px;
+      max-width: 300px;
+      display: block;
+      margin: 10px auto;
     }
-    #movieDetails {
+    #movieInfo {
+      font-size: 18px;
+      margin-top: 10px;
       text-align: left;
       color: #bbb;
-      margin-top: 20px;
-      font-size: 18px;
+      display: inline-block;
     }
-    #movieDetails p {
-      margin: 10px 0;
-      line-height: 1.5;
-    }
-    #movieDetails p strong {
-      color: #fff;
-    }
-    #grade {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 15px;
-      width: 60%;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      background-color: #555;
+    table {
+      margin: 20px auto;
+      width: 80%;
+      border-collapse: collapse;
       color: white;
     }
-    #ratedMoviesList {
-      margin-top: 30px;
-      padding: 20px;
-      background-color: #333;
-      border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
-    }
-    #ratedMoviesList table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    #ratedMoviesList th, #ratedMoviesList td {
+    th, td {
+      border: 1px solid white;
       padding: 10px;
       text-align: center;
     }
-    #ratedMoviesList th {
+    th {
       background-color: #4CAF50;
     }
-    #ratedMoviesList td {
-      background-color: #444;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
   <h1>Random Movie Grader</h1>
   <button onclick="getMovie()">Get Random Movie</button>
-
-  <div id="movieContainer" style="display: none;">
-    <img id="moviePoster" src="" alt="" />
-    <div id="movieDetails">
-      <p><strong>Title:</strong> <span id="movieTitle"></span></p>
-      <p><strong>Year:</strong> <span id="movieYear"></span></p>
-      <p><strong>Genre:</strong> <span id="movieGenre"></span></p>
-      <p><strong>Director:</strong> <span id="movieDirector"></span></p>
-      <p><strong>Actors:</strong> <span id="movieActors"></span></p>
-      <p><strong>Plot:</strong> <span id="moviePlot"></span></p>
+  <div id="movieDetails">
+    <img id="moviePoster" src="" alt="" style="display:none;">
+    <div id="movieInfo" style="display:none;">
+      <p id="movieTitle"></p>
+      <p id="movieYear"></p>
+      <p id="movieGenre"></p>
+      <p id="movieDirector"></p>
+      <p id="movieActors"></p>
+      <p id="moviePlot"></p>
     </div>
-    <input type="number" id="grade" placeholder="Enter grade" />
-    <button onclick="submitGrade()">Submit Grade</button>
-    <p id="errorMessage"></p>
   </div>
-
+  <input type="number" id="grade" placeholder="Enter grade" />
+  <button onclick="submitGrade()">Submit Grade</button>
   <br /><br />
   <button onclick="resetMovies()">Reset Movie List</button>
-  <br /><br />
-  <button onclick="viewRatedMovies()">View Rated Movies</button>
-
-  <div id="ratedMoviesList" style="display: none;">
-    <h2>Rated Movies List</h2>
+  <button onclick="toggleRatedMovies()">Show/Hide Rated Movies</button>
+  
+  <div id="ratedMoviesTable" class="hidden">
+    <h2>Rated Movies</h2>
     <table>
       <thead>
         <tr>
@@ -125,7 +89,7 @@
           <th>Date Rated</th>
         </tr>
       </thead>
-      <tbody id="ratedMoviesTable"></tbody>
+      <tbody id="ratedMoviesBody"></tbody>
     </table>
   </div>
 
@@ -135,16 +99,17 @@
         const response = await fetch('https://quatre444.pythonanywhere.com/movie');
         const data = await response.json();
         if (data.Title) {
-          document.getElementById('movieTitle').innerText = data.Title;
-          document.getElementById('movieYear').innerText = data.Year;
-          document.getElementById('movieGenre').innerText = data.Genre;
-          document.getElementById('movieDirector').innerText = data.Director;
-          document.getElementById('movieActors').innerText = data.Actors;
-          document.getElementById('moviePlot').innerText = data.Plot;
           document.getElementById('moviePoster').src = data.Poster;
-          
-          // Show the movie details
-          document.getElementById('movieContainer').style.display = 'block';
+          document.getElementById('moviePoster').style.display = 'block';
+
+          const movieInfo = document.getElementById('movieInfo');
+          movieInfo.style.display = 'block';
+          document.getElementById('movieTitle').innerText = `Title: ${data.Title}`;
+          document.getElementById('movieYear').innerText = `Year: ${data.Year}`;
+          document.getElementById('movieGenre').innerText = `Genre: ${data.Genre}`;
+          document.getElementById('movieDirector').innerText = `Director: ${data.Director}`;
+          document.getElementById('movieActors').innerText = `Actors: ${data.Actors}`;
+          document.getElementById('moviePlot').innerText = `Plot: ${data.Plot}`;
         } else {
           alert("No more movies!");
         }
@@ -155,12 +120,8 @@
     }
 
     async function submitGrade() {
-      const movie = document.getElementById('movieTitle').innerText;
+      const movie = document.getElementById('movieTitle').innerText.replace('Title: ', '');
       const grade = document.getElementById('grade').value;
-      const errorMessage = document.getElementById('errorMessage');
-
-      // Hide any previous error message
-      errorMessage.style.display = 'none';
 
       if (!movie || !grade) {
         alert("Please select a movie and enter a grade.");
@@ -168,22 +129,15 @@
       }
 
       try {
-        const response = await fetch('https://quatre444.pythonanywhere.com/grade', {
+        await fetch('https://quatre444.pythonanywhere.com/grade', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ movie, grade })
         });
-        const data = await response.json();
-
-        if (data.error) {
-          // Show the error message from the back-end
-          errorMessage.innerText = data.error;
-          errorMessage.style.display = 'block';
-        } else {
-          alert("Grade submitted!");
-          document.getElementById('movieContainer').style.display = 'none'; // Hide movie details after grading
-          document.getElementById('grade').value = ""; // Clear the grade input
-        }
+        alert("Grade submitted!");
+        document.getElementById('moviePoster').style.display = 'none';
+        document.getElementById('movieInfo').style.display = 'none';
+        document.getElementById('grade').value = "";
       } catch (error) {
         console.error("Error submitting grade:", error);
         alert("Error submitting grade.");
@@ -192,9 +146,7 @@
 
     async function resetMovies() {
       try {
-        const response = await fetch('https://quatre444.pythonanywhere.com/reset', {
-          method: 'POST'
-        });
+        const response = await fetch('https://quatre444.pythonanywhere.com/reset', { method: 'POST' });
         const data = await response.json();
         alert(data.message || "Movie list reset!");
       } catch (error) {
@@ -203,29 +155,34 @@
       }
     }
 
-    async function viewRatedMovies() {
-      try {
-        const response = await fetch('https://quatre444.pythonanywhere.com/rated-movies');
-        const data = await response.json();
+    async function toggleRatedMovies() {
+      const tableDiv = document.getElementById('ratedMoviesTable');
+      if (tableDiv.classList.contains('hidden')) {
+        // Fetch rated movies and show the table
+        try {
+          const response = await fetch('https://quatre444.pythonanywhere.com/rated-movies');
+          const ratedMovies = await response.json();
 
-        const tableBody = document.getElementById('ratedMoviesTable');
-        tableBody.innerHTML = "";  // Clear any existing rows
+          const tbody = document.getElementById('ratedMoviesBody');
+          tbody.innerHTML = ""; // Clear existing rows
 
-        data.forEach(movie => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${movie.movie}</td>
-            <td>${movie.grade}</td>
-            <td>${movie.date}</td>
-          `;
-          tableBody.appendChild(row);
-        });
+          ratedMovies.forEach(movie => {
+            const row = `<tr>
+                          <td>${movie.movie}</td>
+                          <td>${movie.grade}</td>
+                          <td>${movie.date}</td>
+                        </tr>`;
+            tbody.innerHTML += row;
+          });
 
-        // Show the rated movies list
-        document.getElementById('ratedMoviesList').style.display = 'block';
-      } catch (error) {
-        console.error("Error fetching rated movies:", error);
-        alert("Error fetching rated movies.");
+          tableDiv.classList.remove('hidden'); // Show the table
+        } catch (error) {
+          console.error("Error fetching rated movies:", error);
+          alert("Error fetching rated movies.");
+        }
+      } else {
+        // Hide the table
+        tableDiv.classList.add('hidden');
       }
     }
   </script>
