@@ -9,7 +9,6 @@
       font-family: 'Arial', sans-serif;
       text-align: center;
       padding: 20px;
-      margin: 0;
     }
     h1 {
       font-size: 32px;
@@ -69,11 +68,26 @@
       background-color: #555;
       color: white;
     }
-    #errorMessage {
-      color: red;
-      margin-top: 10px;
-      font-size: 16px;
-      display: none;
+    #ratedMoviesList {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #333;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+    }
+    #ratedMoviesList table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #ratedMoviesList th, #ratedMoviesList td {
+      padding: 10px;
+      text-align: center;
+    }
+    #ratedMoviesList th {
+      background-color: #4CAF50;
+    }
+    #ratedMoviesList td {
+      background-color: #444;
     }
   </style>
 </head>
@@ -98,6 +112,22 @@
 
   <br /><br />
   <button onclick="resetMovies()">Reset Movie List</button>
+  <br /><br />
+  <button onclick="viewRatedMovies()">View Rated Movies</button>
+
+  <div id="ratedMoviesList" style="display: none;">
+    <h2>Rated Movies List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Grade</th>
+          <th>Date Rated</th>
+        </tr>
+      </thead>
+      <tbody id="ratedMoviesTable"></tbody>
+    </table>
+  </div>
 
   <script>
     async function getMovie() {
@@ -116,7 +146,7 @@
           // Show the movie details
           document.getElementById('movieContainer').style.display = 'block';
         } else {
-          document.getElementById('movie').innerText = "No more movies!";
+          alert("No more movies!");
         }
       } catch (error) {
         console.error("Error fetching movie:", error);
@@ -170,6 +200,32 @@
       } catch (error) {
         console.error("Error resetting movie list:", error);
         alert("Error resetting movie list.");
+      }
+    }
+
+    async function viewRatedMovies() {
+      try {
+        const response = await fetch('https://quatre444.pythonanywhere.com/rated-movies');
+        const data = await response.json();
+
+        const tableBody = document.getElementById('ratedMoviesTable');
+        tableBody.innerHTML = "";  // Clear any existing rows
+
+        data.forEach(movie => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${movie.movie}</td>
+            <td>${movie.grade}</td>
+            <td>${movie.date}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+
+        // Show the rated movies list
+        document.getElementById('ratedMoviesList').style.display = 'block';
+      } catch (error) {
+        console.error("Error fetching rated movies:", error);
+        alert("Error fetching rated movies.");
       }
     }
   </script>
