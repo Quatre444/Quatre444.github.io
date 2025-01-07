@@ -9,45 +9,65 @@
       font-family: 'Arial', sans-serif;
       text-align: center;
       padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      font-weight: bold;
     }
     button {
       background-color: #4CAF50;
       color: white;
       border: none;
       padding: 10px 20px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
       font-size: 16px;
       margin: 10px;
       cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
     }
     button:hover {
       background-color: #45a049;
     }
-    #movie {
-      margin-top: 20px;
-      font-size: 24px;
-      font-weight: bold;
+    #movieContainer {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #333;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+      margin-top: 40px;
     }
     #moviePoster {
-      margin-top: 20px;
-      max-width: 300px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 100%;
+      border-radius: 8px;
     }
     #movieDetails {
-      font-size: 18px;
-      margin-top: 10px;
-      color: #bbb;
       text-align: left;
-      margin: 10px auto;
-      width: 80%;
+      color: #bbb;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    #movieDetails p {
+      margin: 10px 0;
+      line-height: 1.5;
+    }
+    #movieDetails p strong {
+      color: #fff;
     }
     #grade {
       padding: 10px;
       font-size: 16px;
+      margin-top: 15px;
+      width: 60%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: #555;
+      color: white;
     }
     #errorMessage {
       color: red;
@@ -60,22 +80,24 @@
 <body>
   <h1>Random Movie Grader</h1>
   <button onclick="getMovie()">Get Random Movie</button>
-  <p id="movie">No movie selected yet</p>
-  <div id="movieDetails" style="display:none;">
-    <p><strong>Title:</strong> <span id="movieTitle"></span></p>
-    <p><strong>Year:</strong> <span id="movieYear"></span></p>
-    <p><strong>Genre:</strong> <span id="movieGenre"></span></p>
-    <p><strong>Director:</strong> <span id="movieDirector"></span></p>
-    <p><strong>Actors:</strong> <span id="movieActors"></span></p>
-    <p><strong>Plot:</strong> <span id="moviePlot"></span></p>
-    <img id="moviePoster" src="" alt="" style="display:none;">
+
+  <div id="movieContainer" style="display: none;">
+    <img id="moviePoster" src="" alt="" />
+    <div id="movieDetails">
+      <p><strong>Title:</strong> <span id="movieTitle"></span></p>
+      <p><strong>Year:</strong> <span id="movieYear"></span></p>
+      <p><strong>Genre:</strong> <span id="movieGenre"></span></p>
+      <p><strong>Director:</strong> <span id="movieDirector"></span></p>
+      <p><strong>Actors:</strong> <span id="movieActors"></span></p>
+      <p><strong>Plot:</strong> <span id="moviePlot"></span></p>
+    </div>
+    <input type="number" id="grade" placeholder="Enter grade" />
+    <button onclick="submitGrade()">Submit Grade</button>
+    <p id="errorMessage"></p>
   </div>
-  <input type="number" id="grade" placeholder="Enter grade" />
-  <button onclick="submitGrade()">Submit Grade</button>
+
   <br /><br />
   <button onclick="resetMovies()">Reset Movie List</button>
-
-  <p id="errorMessage"></p>
 
   <script>
     async function getMovie() {
@@ -90,14 +112,15 @@
           document.getElementById('movieActors').innerText = data.Actors;
           document.getElementById('moviePlot').innerText = data.Plot;
           document.getElementById('moviePoster').src = data.Poster;
-          document.getElementById('moviePoster').style.display = 'block';
-          document.getElementById('movieDetails').style.display = 'block';
+          
+          // Show the movie details
+          document.getElementById('movieContainer').style.display = 'block';
         } else {
           document.getElementById('movie').innerText = "No more movies!";
         }
       } catch (error) {
         console.error("Error fetching movie:", error);
-        document.getElementById('movie').innerText = "Error fetching movie!";
+        alert("Error fetching movie!");
       }
     }
 
@@ -128,10 +151,8 @@
           errorMessage.style.display = 'block';
         } else {
           alert("Grade submitted!");
-          document.getElementById('movie').innerText = ""; // Clear the displayed movie
+          document.getElementById('movieContainer').style.display = 'none'; // Hide movie details after grading
           document.getElementById('grade').value = ""; // Clear the grade input
-          document.getElementById('moviePoster').style.display = 'none'; // Hide the poster
-          document.getElementById('movieDetails').style.display = 'none'; // Hide movie details
         }
       } catch (error) {
         console.error("Error submitting grade:", error);
