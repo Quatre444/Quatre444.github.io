@@ -16,14 +16,14 @@
 	  const data = await response.json();
 	  document.getElementById('movie').innerText = data.movie || "No more movies!";
 	}
-
+	
 	async function submitGrade() {
 	  const movie = document.getElementById('movie').innerText;
 	  const grade = document.getElementById('grade').value;
 	  await fetch('https://quatre444.pythonanywhere.com/grade', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ movie, grade })
+	    method: 'POST',
+	    headers: { 'Content-Type': 'application/json' },
+	    body: JSON.stringify({ movie, grade })
 	  });
 	  alert("Grade submitted!");
 	}
