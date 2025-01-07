@@ -121,7 +121,7 @@
         document.getElementById('movie').innerText = movieTitle;
 
         // Fetch the movie poster from OMDb API
-        const movieData = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(movieTitle)}&apikey=${omdbApiKey}`);
+        const movieData = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(movieTitle)}&apikey=${8611a7d8}`);
         const movieDetails = await movieData.json();
         
         if (movieDetails.Response === "True") {
