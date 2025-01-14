@@ -89,6 +89,22 @@
     #ratedMoviesList td {
       background-color: #444;
     }
+    #cageImage {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      border-radius: 50%;
+      border: 2px solid white;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    #cageImage:hover {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
@@ -132,8 +148,30 @@
       <tbody id="ratedMoviesTable"></tbody>
     </table>
   </div>
-
+<!-- Nicolas Cage Image -->
+  <img id="cageImage" src="https://www.nicepng.com/png/detail/79-795242_nicolas-cage-face-png-nicolas-cage.png" alt="Nicolas Cage" title="Click for a Nicolas Cage movie" />
   <script>
+    // Random Nicolas Cage Movie Fetcher
+    async function getCageMovie() {
+      try {
+        const response = await fetch('https://quatre444.pythonanywhere.com/nic-cage-movie'); // Adjust endpoint as needed
+        const data = await response.json();
+
+        if (data.Title) {
+          alert(`Title: ${data.Title}\nYear: ${data.Year}\nGenre: ${data.Genre}`);
+        } else {
+          alert("No more Nicolas Cage movies!");
+        }
+      } catch (error) {
+        console.error("Error fetching Nicolas Cage movie:", error);
+        alert("Error fetching Nicolas Cage movie!");
+      }
+    }
+
+    // Add event listener to the Nicolas Cage image
+    document.getElementById('cageImage').addEventListener('click', getCageMovie);
+
+    
     async function getMovie() {
       try {
         const response = await fetch('https://quatre444.pythonanywhere.com/movie');
