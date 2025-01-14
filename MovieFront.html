@@ -346,42 +346,43 @@
       }
     }
 
-    async function viewRatedMovies() {
-      const ratedMoviesList = document.getElementById('ratedMoviesList');
-    
-      // Toggle visibility
-      if (ratedMoviesList.style.display === 'block') {
-        ratedMoviesList.style.display = 'none';
-      } else {
-        try {
-          const response = await fetch('https://quatre444.pythonanywhere.com/rated-movies?id=${userId}');
-          const data = await response.json();
-          if (data.error) {
-            alert(data.error);
-            return;
-          }
-          
-          const tableBody = document.getElementById('ratedMoviesTable');
-          tableBody.innerHTML = ""; // Clear any existing rows
-    
-          data.forEach(movie => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${movie.movie}</td>
-              <td>${movie.grade}</td>
-              <td>${movie.date}</td>
-            `;
-            tableBody.appendChild(row);
-          });
-    
-          // Show the rated movies list
-          ratedMoviesList.style.display = 'block';
-        } catch (error) {
-          console.error("Error fetching rated movies:", error);
-          alert("Error fetching rated movies.");
-        }
+async function viewRatedMovies() {
+  const ratedMoviesList = document.getElementById('ratedMoviesList');
+
+  // Toggle visibility
+  if (ratedMoviesList.style.display === 'block') {
+    ratedMoviesList.style.display = 'none';
+  } else {
+    try {
+      const response = await fetch(`https://quatre444.pythonanywhere.com/rated-movies?id=${userId}`);
+      const data = await response.json();
+
+      if (data.error) {
+        alert(data.error);
+        return;
       }
+
+      const tableBody = document.getElementById('ratedMoviesTable');
+      tableBody.innerHTML = ""; // Clear any existing rows
+
+      data.forEach(movie => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${movie.movie}</td>
+          <td>${movie.grade}</td>
+          <td>${movie.date}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      // Show the rated movies list
+      ratedMoviesList.style.display = 'block';
+    } catch (error) {
+      console.error("Error fetching rated movies:", error);
+      alert("Error fetching rated movies.");
     }
+  }
+}
   </script>
 </body>
 </html>
