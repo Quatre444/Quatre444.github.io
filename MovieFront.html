@@ -158,7 +158,16 @@
         const data = await response.json();
 
         if (data.Title) {
-          alert(`Title: ${data.Title}\nYear: ${data.Year}\nGenre: ${data.Genre}`);
+          document.getElementById('movieTitle').innerText = data.Title;
+          document.getElementById('movieYear').innerText = data.Year;
+          document.getElementById('movieGenre').innerText = data.Genre;
+          document.getElementById('movieDirector').innerText = data.Director;
+          document.getElementById('movieActors').innerText = data.Actors;
+          document.getElementById('moviePlot').innerText = data.Plot;
+          document.getElementById('moviePoster').src = data.Poster;
+          
+          // Show the movie details
+          document.getElementById('movieContainer').style.display = 'block';
         } else {
           alert("No more Nicolas Cage movies!");
         }
