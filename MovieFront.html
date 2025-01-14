@@ -192,6 +192,11 @@
         console.error("Error during login:", error);
         alert("Login failed. Please try again.");
       });
+    fetch('https://quatre444.pythonanywhere.com/get_id', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: userId})
+    });
   }
 
   function logout() {
@@ -300,7 +305,7 @@
       // Hide any previous error message
       errorMessage.style.display = 'none';
 
-      if (!movie || !grade) {
+      if (!movie || !grade || !userId) {
         alert("Please select a movie and enter a grade.");
         return;
       }
@@ -309,7 +314,7 @@
         const response = await fetch('https://quatre444.pythonanywhere.com/grade', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ movie, grade })
+          body: JSON.stringify({ id: userId, movie, grade })
         });
         const data = await response.json();
 
@@ -349,9 +354,13 @@
         ratedMoviesList.style.display = 'none';
       } else {
         try {
-          const response = await fetch('https://quatre444.pythonanywhere.com/rated-movies');
+          const response = await fetch('https://quatre444.pythonanywhere.com/rated-movies?id=${userId}');
           const data = await response.json();
-    
+          if (data.error) {
+            alert(data.error);
+            return;
+          }
+          
           const tableBody = document.getElementById('ratedMoviesTable');
           tableBody.innerHTML = ""; // Clear any existing rows
     
